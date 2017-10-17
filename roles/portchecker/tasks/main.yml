@@ -1,0 +1,14 @@
+---
+
+- name: Copy config file
+  template:
+    src: config.j2
+    dest: /tmp/portchecker.config
+
+- include_tasks: apiserver.yml
+  when: portchecker_run_mode == 'apiserver'
+
+- include_tasks: check-agent.yml
+  when: portchecker_run_mode == 'check-agent'
+
+...

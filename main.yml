@@ -1,0 +1,19 @@
+---
+
+- hosts: apiservers
+  become: yes
+  gather_facts: yes
+  roles:
+    - role: docker-ce
+    - role: portchecker-db
+    - role: portchecker
+      vars:
+        portchecker_run_mode: apiserver
+
+- hosts: agents
+  roles:
+    - role: portchecker
+      vars:
+        portchecker_run_mode: check-agent
+
+...

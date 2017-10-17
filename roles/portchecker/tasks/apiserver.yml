@@ -1,0 +1,25 @@
+---
+
+- name: Ensure directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /opt/portchecker
+
+- name: Copy portchecker go binary on VM
+  copy:
+    src: "{{ playbook_dir }}/portchecker"
+    dest: /opt/portchecker
+    mode: 0755
+
+- name: Ensure systemd unit file exists
+  template:
+    src: etc_systemd_unit.service.j2
+    dest: /etc/systemd/system/portchecker-apiserver.service
+
+- name: Ensure portchecker service is up
+  systemd:
+    name: portchecker-apiserver
+    state: restarted
+    daemon_reload: yes

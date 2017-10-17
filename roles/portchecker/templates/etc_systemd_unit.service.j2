@@ -1,0 +1,16 @@
+[Unit]
+Description=Portchecker apiserver
+After=network.target
+
+[Service]
+Environment=DB_URL=localhost
+
+SyslogIdentifier=portchecker-apiserver
+
+ExecStart=/opt/portchecker/portchecker {{ portchecker_run_mode | default(portchecker_mode) }} /tmp/portchecker.config 1
+
+Restart=always
+StartLimitBurst=100
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+---
+
+- name: Copy portchecker go binary on VM
+  copy:
+    src: "{{ playbook_dir }}/portchecker"
+    dest: /tmp/portchecker
+    mode: 0755
+
+- name: Exec portchecker on VM
+  command: /tmp/portchecker {{ portchecker_run_mode | default(portchecker_mode) }} /tmp/portchecker.config 1
+  register: portchecker_result
+
+...

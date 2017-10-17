@@ -1,0 +1,17 @@
+---
+
+- name: Ensure git is installed
+  package:
+    name: git
+    state: present
+
+- name: Ensure portchecker git repo is cloned
+  git:
+    repo: 'https://github.com/ylascombe/portchecker.git'
+    dest: /tmp/portchecker-repo
+    accept_hostkey: yes
+
+- name: Apply docker-compose up on portchecker docker file to bring up PostgresSQL db
+  shell: cd /tmp/portchecker-repo && docker-compose up -d
+
+...
