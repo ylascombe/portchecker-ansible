@@ -8,6 +8,8 @@
 
 - name: Exec portchecker on VM
   command: /tmp/portchecker {{ portchecker_run_mode | default(portchecker_mode) }} /tmp/portchecker.config 1
+  environment:
+    APISERVER_URL: "http://{{ hostvars[groups['apiservers'][0]]['inventory_hostname'] }}:8090"
   register: portchecker_result
 
 ...

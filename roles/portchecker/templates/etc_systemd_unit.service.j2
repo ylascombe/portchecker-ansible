@@ -3,7 +3,7 @@ Description=Portchecker apiserver
 After=network.target
 
 [Service]
-Environment=DB_URL=localhost
+Environment=APISERVER_URL=http://{{ hostvars[groups['apiservers'][0]]['inventory_hostname'] }}:8090
 
 SyslogIdentifier=portchecker-apiserver
 
