@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "apiserver" do |vm|
     vm.vm.hostname = "apiserver"
-    vm.vm.network "private_network", ip: "192.168.33.1"
+    vm.vm.network "private_network", ip: "192.168.33.5"
     config.vm.provision :shell, inline: $PIP
   end
 
