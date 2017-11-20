@@ -1,8 +1,23 @@
 ---
 
+- hosts: all
+  tasks:
+    - name: Ensure analysis_id and config_file_path param are given
+      fail:
+        msg: "Parameters analysis_id and config_file_path required"
+      when: |
+        analysis_id is not defined or
+        config_file_path is not defined
+      tags: [ always ]
+
+- hosts: all
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: test-only
+
 - hosts: apiservers
   become: yes
-  gather_facts: yes
   roles:
     - role: docker-ce
     - role: portchecker-db
@@ -10,10 +25,22 @@
       vars:
         portchecker_run_mode: apiserver
 
-- hosts: agents
+- hosts: probe-agents
+  roles:
+    - role: portchecker
+      vars:
+        portchecker_run_mode: probe-agent
+      tags:
+        - agent
+        - probe-agent
+
+- hosts: check-agents
   roles:
     - role: portchecker
       vars:
         portchecker_run_mode: check-agent
+      tags:
+        - agent
+        - check-agent
 
 ...
