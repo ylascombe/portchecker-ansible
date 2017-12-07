@@ -7,7 +7,7 @@
     mode: 0755
 
 - name: Exec portchecker on VM
-  command: /tmp/portchecker {{ portchecker_run_mode | default(portchecker_mode) }} /tmp/portchecker.config {{ analysis_id }}
+  command: /tmp/portchecker --mode {{ portchecker_run_mode | default(portchecker_mode) }} --mapping_file_url /tmp/portchecker.config --analysis_id {{ analysis_id }}
   environment:
     APISERVER_URL: "http://{{ hostvars[groups['apiservers'][0]]['inventory_hostname'] }}:8090"
   register: portchecker_result

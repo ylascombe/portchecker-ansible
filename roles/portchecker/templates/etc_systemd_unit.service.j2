@@ -7,7 +7,7 @@ Environment=APISERVER_URL=http://{{ hostvars[groups['apiservers'][0]]['inventory
 
 SyslogIdentifier=portchecker-apiserver
 
-ExecStart=/opt/portchecker/portchecker {{ portchecker_run_mode | default(portchecker_mode) }} /tmp/portchecker.config 1
+ExecStart=/opt/portchecker/portchecker --mode {{ portchecker_run_mode | default(portchecker_mode) }}
 
 Restart=always
 StartLimitBurst=100
