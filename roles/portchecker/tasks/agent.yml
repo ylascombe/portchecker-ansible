@@ -12,4 +12,34 @@
     APISERVER_URL: "http://{{ hostvars[groups['apiservers'][0]]['inventory_hostname'] }}:8090"
   register: portchecker_result
 
+- name: debug
+  debug:
+    var: portchecker_result
+
+- name: Create tmp folder on control machine
+  delegate_to: localhost
+  run_once: true
+  file:
+    path: local-dir/{{ analysis_id }}
+    state: directory
+
+# XXX since the target VM does not have systematically access to the apiserver, collect the result on the
+# control machine to send it from control machine
+- name: Gather result from result file
+  fetch:
+    src: /tmp/probe-agent-result.json
+    dest: local-dir/{{ analysis_id }}/{{ inventory_hostname }}.json
+    flat: yes
+
+- name: Register result on API
+  delegate_to: localhost
+  uri:
+    url: "http://127.0.0.1:8090/v1/hostname/{{ inventory_hostname }}/analysis_id/{{ analysis_id }}/probe_agent/"
+    method: POST
+    body: "{{ lookup('file','local-dir/{{ analysis_id }}/{{ inventory_hostname }}.json') }}"
+    body_format: json
+    headers:
+      Content-Type: "application/json"
+    status_code: 201
+
 ...

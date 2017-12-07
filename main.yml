@@ -3,6 +3,7 @@
 - hosts: all
   tasks:
     - name: Ensure analysis_id and config_file_path param are given
+      run_once: true
       fail:
         msg: "Parameters analysis_id and config_file_path required"
       when: |
